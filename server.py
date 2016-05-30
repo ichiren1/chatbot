@@ -38,7 +38,7 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             commands = message.split()
             if len(commands) == 2:
                 if commands[1] == "ping":
-                    receive = "pong1"
+                    receive = "bot ping"
             command = {}
             if len(commands) == 3:
                 if commands[1] == "todo" and commands[2] == "list":
