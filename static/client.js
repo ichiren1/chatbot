@@ -5,7 +5,7 @@ $(function () {
   }else{
     ws_scheme = "ws://";
   }
-  var ws = new WebSocket(ws_scheme+location.host+'/ws');
+  var ws = new WebSocket(ws_scheme+location.host);
   $('form').submit(function(){
     var $this = $(this);
     ws.onopen = function() {

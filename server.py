@@ -77,8 +77,8 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
         print("WebSocket closed")
 
 app = tornado.web.Application([
-    (r"/", IndexHandler),
-    (r"/ws", SendWebSocket),
+    (r"/index", IndexHandler),
+    (r"/", SendWebSocket),
 ],
 template_path=os.path.join(os.getcwd(), "templates"),
 static_path=os.path.join(os.getcwd(), "static"),
