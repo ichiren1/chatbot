@@ -38,6 +38,10 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             commands = message.split()
             if len(commands) == 2:
                 if commands[1] == "ping":
+                    data = {}
+                    data['data'] = receive
+                    print(data)
+                    self.write_message(json.dumps(data))
                     receive = "pong"
             command = {}
             if len(commands) == 3:
