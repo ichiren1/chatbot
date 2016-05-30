@@ -33,16 +33,17 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
         print("WebSocket opened") 
 
     def on_message(self, message):
-        receive = message
+        receive = ""
+        data = {}
+        data['data'] = message
+        print(data)
+        self.write_message(json.dumps(data))
         if message.startswith("bot"):
             commands = message.split()
             if len(commands) == 2:
                 if commands[1] == "ping":
-                    data = {}
-                    data['data'] = receive
-                    print(data)
+                    data['data'] = "pong"
                     self.write_message(json.dumps(data))
-                    receive = "pong"
             command = {}
             if len(commands) == 3:
                 if commands[1] == "todo" and commands[2] == "list":
@@ -52,30 +53,31 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
                         receive = "todo empty"
                     else:
                         receive = "\n".join([n+" "+c for n, c in [row for row in result]])
+                    data['data'] = receive
+                    self.write_message(json.dumps(data))
                 else:
                     command['command'] = commands[1]
                     command['data'] = commands[2]
                     bot = Bot(command)
                     bot.generate_hash()
-                    receive = bot.hash
+                    data['data'] = bot.hash
+                    self.write_message(json.dumps(data))
             elif len(commands) == 4:
                 if commands[1] == "todo" and commands[2] == "delete":
                     cur.execute("delete from todo where name='%s'" % commands[3])
                     connector.commit()
                     status, num = cur.statusmessage.split()
                     if status == "DELETE" and int(num) > 0:
-                        receive = "todo deleted"
+                        data['data'] = "todo deleted"
+                        self.write_message(json.dumps(data))
             elif len(commands) >= 5:
                 if commands[1] == "todo" and commands[2] == "add":
                     cur.execute("insert into todo values('%s','%s')" % (commands[3], " ".join(commands[4:])))
                     connector.commit()
                     status, num1, num2 = cur.statusmessage.split()
                     if status == "INSERT" and int(num2) > 0:
-                        receive = "todo added"
-        data = {}
-        data['data'] = receive
-        print(data)
-        self.write_message(json.dumps(data))
+                        data['data'] = "todo added"
+                        self.write_message(json.dumps(data))
 
     def on_close(self):
         print("WebSocket closed")
