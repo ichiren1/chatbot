@@ -1,5 +1,11 @@
 $(function () {
-  var ws = new WebSocket('ws://localhost:8080/ws');
+  var ws_scheme = "";
+  if(window.location.protocol == "https:"){
+    ws_scheme = "wss://";
+  }else{
+    ws_scheme = "ws://";
+  }
+  var ws = new WebSocket(ws_scheme+location.host+'/ws');
   $('form').submit(function(){
     var $this = $(this);
     ws.onopen = function() {

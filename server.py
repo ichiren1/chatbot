@@ -48,5 +48,7 @@ static_path=os.path.join(os.getcwd(), "static"),
 
 if __name__ == "__main__":
     parse_command_line()
-    app.listen(options.port)
+    port = int(os.environ.get("PORT", 5000))
+    print("Listen :%d" % port)
+    app.listen(port)
     tornado.ioloop.IOLoop.instance().start()
