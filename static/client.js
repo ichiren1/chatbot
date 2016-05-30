@@ -8,13 +8,16 @@ $(function () {
   var ws = new WebSocket(ws_scheme+location.host);
   $('form').submit(function(){
     var $this = $(this);
-    ws.onopen = function() {
-      console.log('sent message: %s', $('#m').val());
-    };
+    
+    // ws.send("bot ping");
     ws.send($('#m').val());
     $('#m').val('');
     return false;
   });
+  
+  // ws.onopen = function() {
+  //   console.log('sent message: %s', $('#m').val());
+  // };
   
   ws.onmessage = function(msg){
     var returnObject = JSON.parse(msg.data);
